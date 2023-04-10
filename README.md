@@ -7,9 +7,11 @@ Please fill out all of the following sections to help us grade your submission:
 
 ## Student (to be completed individually)
 
-* First Last, x500@umn.edu
+* John Cullom, cullo006@umn.edu
 
 ## Link to Site
+
+## used https://medium.com/tinyso/how-to-create-a-dropdown-select-component-in-react-bf85df53e206 to build a dropdown
 
 <https://TODO.com/>
 
