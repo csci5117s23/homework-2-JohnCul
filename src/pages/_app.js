@@ -1,6 +1,6 @@
 import '@/styles/globals.css'
 import 'purecss/build/pure.css'
-import "./Dropdown.css";
+import "./dropdown.css";
 import styles from '@/styles/Home.module.css'
 import Link from 'next/link'
 import { ClerkProvider } from '@clerk/nextjs'
