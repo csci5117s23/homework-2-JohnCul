@@ -3,7 +3,8 @@ import {useEffect, useState} from 'react'
 
 export default function CategorySelector(props) {
     const [categoriesLocal, setCategoriesLocal] = useState([]);
-
+    const [selectedIndex, setSelectedIndex]=useState(-1);
+ 
     let loading = props.loading;
     let categories = props.categories;
     let selectedCategory = props.selectedCategory;
@@ -11,11 +12,19 @@ export default function CategorySelector(props) {
     useEffect(() => {
         setCategoriesLocal(props.categories);
         props.setSelectedCategory(props.selectedCategory);
+        // set index to display correct category in dropdown
+        categories.map((cat,index )=> {
+            if(cat==selectedCategory){
+                setSelectedIndex(index);
+            }
+        });
+            
     }, [categories, loading]);
 
     if(!loading){
         function checkSelectedCategory(event){
             props.setSelectedCategory(event.target.value);
+            setSelectedIndex(event.target.value);
             let newCatBox = document.getElementById("newCategoryInput");
             if(event.target.value == 1){
             // show the new input box
@@ -40,7 +49,7 @@ export default function CategorySelector(props) {
         })
 
         return (
-            <select className={styles.todoCategorySelector} name="categoriesSelector" id="categoriesSelector" onChange={checkSelectedCategory} value={props.selectedCategory}>
+            <select className={styles.todoCategorySelector} name="categoriesSelector" id="categoriesSelector" onChange={checkSelectedCategory} value={selectedIndex} defaultValue={selectedIndex}>
                 {mappedCats}
             </select>
         )

@@ -1,14 +1,16 @@
 const backend_base = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
 //fetch data for /todo/:id
-export async function fetchItemData(setData, setLoading, userId, authToken) {
-  const response = await fetch(backend_base+`/toDoItem?userId=${userId}&_id=${newPost._id}`, {
-    'method':'GET',
-    'headers': {'Authorization': 'Bearer ' + authToken, 'Accept': 'application/json'}
-  })
-  const data = await response.json()
-  // update state -- configured earlier.
-  console.log(data);
+export async function fetchItemData(itemId,userId, setData, authToken) {
+  if(userId && itemId){
+    const response = await fetch(backend_base+`/toDoItem?userId=${userId}&_id=${itemId}`, {
+      'method':'GET',
+      'headers': {'Authorization': 'Bearer ' + authToken, 'Accept': 'application/json'}
+    })
+    const data = await response.json()
+    // update state -- configured earlier.
+    setData(data[0]);
+  }
 }
 
 // fetch data for /todos
@@ -42,7 +44,6 @@ export async function fetchCategories(setCategories, userId, authToken) {
     'headers': {'Authorization': 'Bearer ' + authToken}
   })
   const data = await response.json()
-  console.log(data);
   // update state -- configured earlier.
   let newCats = [""];
     newCats=newCats.concat("New Category");

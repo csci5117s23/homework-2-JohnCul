@@ -7,6 +7,17 @@
   margin:10px;
 }
 
+.individualtodoitem {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.5rem 1rem;
+  background-color: rgba(var(--callout-rgb), 0.5);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: var(--border-radius);
+  margin-top: 0.5rem;
+  align-items: center;
+}
+
 .todoitem {
   margin-left: auto;
   margin-right: auto;
@@ -38,6 +49,17 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.editDescription {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 100%;
+  box-sizing:border-box;
+}
+
+.editWrapper{
+  display: block;
+  overflow: hidden;
 }
 
 .newtodoitem, .categoryLabel {

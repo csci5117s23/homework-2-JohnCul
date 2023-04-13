@@ -3,32 +3,70 @@ import {useState, useEffect}from 'react';
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
-import {fetchItemData} from '@/modules/Data.js'
+import CategorySelector from '@/components/CategorySelector.js'
+import {fetchItemData, updateCheckBox, fetchCategories} from '@/modules/Data.js'
+import { useAuth } from "@clerk/nextjs";
 
 export default function TodoID() {
     const [itemId, setItemId]=useState("");
     const [loading, setLoading]=useState(true);
+    const [newCategory, setNewCategory]=useState("");
+    const [newCategoryHidden, setNewCategoryHidden] = useState(true);
     const [text, setText]=useState("");
     const [data, setData]=useState(null);
+    const [categories, setCategories]=useState([]);
+    const [selectedCategory, setSelectedCategory]=useState("");
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
     const router = useRouter();
+
+    function handleChange(checkbox){
+        const value = checkbox.target.checked;
+        // need to update database: need ID of todo item and value of the checked item
+        // also need to update the list of items
+        async function updateItem(){
+          if(userId){
+            const token = await getToken({template: "codehooks"});
+            let newPost = { ...data}
+            newPost.checked = value;
+            newPost = await updateCheckBox(newPost, token);
+          }
+        }
+        updateItem();
+      }
+
     useEffect(() => {
         setItemId(router.query.id);
     },[router.query]);
-    //console.log(router.asPath.split("/")[2]);
+
     useEffect(() => {
         async function setUp(){
-            if(itemId != null){
-                const token = await getToken({template: "codehooks"});
-                fetchItemData(itemId, authToken);
-                setLoading(false);
+            if(itemId && userId){
+                const authToken = await getToken({template: "codehooks"});
+                fetchItemData(itemId,userId, setData, authToken);
             }
-            fetchItemData();
         }
         setUp();
-    },[itemId]);
+    },[itemId, userId]);
 
+    useEffect(() => {
+        if(data!=null){
+            setText(data.description)
+            setLoading(false);
+            setSelectedCategory(data.category);
+        }
+    },[data]);
 
-
+    //set category list when loaded
+    useEffect(() => {
+      async function loadCategories(){
+        if(userId){
+          const token = await getToken({template: "codehooks"});
+          fetchCategories(setCategories, userId, token);
+        }
+      }
+      loadCategories()
+    }, [loading]);
+// TODO: Make a submit button and make sure everything works correctly on the TODOS page too
     if(loading){
         return(<span>loading...</span>)
     }else{return(
@@ -41,8 +79,38 @@ export default function TodoID() {
       </Head>
       <h1 className={styles.header}>ITEM {itemId}</h1>
       <main className={styles.main}>
-        <input className={styles.newtodoitem} value={text} onChange={(e=>setText(e.target.value))}>
-        </input>
+      <div className={styles.individualtodoitem}>
+      <div key={data.date} className="pure-g">
+          <div key="categoryDesc" className="pure-u-1-5">
+            Category
+          </div>
+          <div key="checkedDesc" className="pure-u-1-5">
+            Completed?
+          </div>
+          <div key="contentDesc" className="pure-u-3-5">
+            Description
+          </div>
+        </div>
+        </div>
+
+      <div className={styles.individualtodoitem}>
+      <div key={data.date} className="pure-g">
+          <div key="category" className="pure-u-1-5">
+            <CategorySelector loading={loading} categories={categories} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
+            <input id="newCategoryInput" maxLength="20" hidden={newCategoryHidden} className={styles.newtodoitem} value={newCategory} onChange={(e=>setNewCategory(e.target.value))}>
+            </input> 
+          </div>
+          <div key="checked" className="pure-u-1-5">
+            <input className = {styles.toDoCheckbox} type="checkbox" name="checkbox" id="checkboxOption" value={data.checked} defaultChecked={data.checked} onClick={handleChange.bind(this)}/>
+          </div>
+          <div key="content" className="pure-u-3-5">
+            <div>
+                <input type="text" id="editDescription" className={styles.editDescription} value={text} onChange={(e=>setText(e.target.value))}>
+                </input> 
+            </div>
+          </div>
+        </div>
+        </div>
       </main>
     </>
     )
