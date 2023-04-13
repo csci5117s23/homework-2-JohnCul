@@ -6,7 +6,7 @@ import {useEffect, useState} from 'react'
 import CategorySelector from '@/components/CategorySelector.js'
 import ToDoItem from '@/components/ToDoItem.js'
 import { useAuth } from "@clerk/nextjs";
-import {fetchDataUnchecked, postDataUnchecked} from '@/modules/Data.js'
+import {fetchDataUnchecked, postDataUnchecked, fetchCategories} from '@/modules/Data.js'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -49,14 +49,13 @@ export default function Home() {
 
   //set category list whenever a new post comes in
   useEffect(() => {
-    let newCats = [""];
-    newCats=newCats.concat("New Category");
-    posts.map(post => {
-      if(!newCats.includes(post.category)){
-        newCats = newCats.concat(post.category);
+    async function loadCategories(){
+      if(userId){
+        const token = await getToken({template: "codehooks"});
+        fetchCategories(setCategories, userId, token);
       }
-    });
-    setCategories(newCats);
+    }
+    loadCategories()
   }, [posts]);
 
   // if valid name, add to database

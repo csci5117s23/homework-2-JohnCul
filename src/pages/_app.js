@@ -14,10 +14,10 @@ export default function App({ Component, pageProps }) {
         </div>
 
         <div className="pure-u-1-4">
-            <Link href="todos">Todos
+            <Link href="/todos">Todos
             </Link>
         </div>
-        <div className="pure-u-1-4"><Link href="done">Done
+        <div className="pure-u-1-4"><Link href="/done">Done
             </Link>
           </div>
         <div className="pure-u-1-4"><p>Categories</p>

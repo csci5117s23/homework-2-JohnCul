@@ -1,5 +1,16 @@
 const backend_base = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
+//fetch data for /todo/:id
+export async function fetchItemData(setData, setLoading, userId, authToken) {
+  const response = await fetch(backend_base+`/toDoItem?userId=${userId}&_id=${newPost._id}`, {
+    'method':'GET',
+    'headers': {'Authorization': 'Bearer ' + authToken, 'Accept': 'application/json'}
+  })
+  const data = await response.json()
+  // update state -- configured earlier.
+  console.log(data);
+}
+
 // fetch data for /todos
 export async function fetchDataUnchecked(setData, setLoading, userId, authToken) {
     const response = await fetch(backend_base+`/toDoItem?userId=${userId}&checked=false`, {
@@ -22,6 +33,25 @@ export async function fetchDataChecked(setData, setLoading, userId, authToken) {
   // update state -- configured earlier.
   setData(data);
   setLoading(false);
+}
+
+//fetch category list for all items
+export async function fetchCategories(setCategories, userId, authToken) {
+  const response = await fetch(backend_base+`/toDoItem?userId=${userId}`, {
+    'method':'GET',
+    'headers': {'Authorization': 'Bearer ' + authToken}
+  })
+  const data = await response.json()
+  console.log(data);
+  // update state -- configured earlier.
+  let newCats = [""];
+    newCats=newCats.concat("New Category");
+    data.map(data => {
+      if(!newCats.includes(data.category)){
+        newCats = newCats.concat(data.category);
+      }
+    });
+  setCategories(newCats);
 }
 
 // send a post to the backend
