@@ -1,6 +1,5 @@
 import '@/styles/globals.css'
 import 'purecss/build/pure.css'
-import "./dropdown.css";
 import styles from '@/styles/Home.module.css'
 import Link from 'next/link'
 import { ClerkProvider } from '@clerk/nextjs'
@@ -13,6 +12,7 @@ export default function App({ Component, pageProps }) {
         <div className="pure-u-1-4">
           <h2>Todo List</h2>
         </div>
+
         <div className="pure-u-1-4">
             <Link href="todos">Todos
             </Link>

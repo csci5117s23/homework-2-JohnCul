@@ -4,80 +4,13 @@ import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import {useEffect, useState} from 'react'
 import 'purecss/build/pure.css';
+import { useAuth, SignIn, UserButton } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ['latin'] })
 
-function todoitem(item){
-  // const [checked, setChecked]=useState(item.checked);
-  // const [description, setDescription]=useState(item.description);
-
-  // const listItems=guestList.map( (name) => <li>{name}</li>)
-
-  // function addName(){
-  //     if(newName.length>0){
-  //         setGuestList(guestList.concat(newName));
-  //     }
-  // }
-
-  return (<div key={item.createdOn} className={styles.todoitem}>{item.front}</div>)
-}
-
 export default function Home() {
-  const API_ENDPOINT = 'https://backend-9f6j.api.codehooks.io/dev/flashCard'
-  const API_KEY = '271f7152-88ba-4d48-bc2d-f433a2c6d37d'
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
 
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading]=useState(true);
-  const [newName, setNewName]=useState("");
-  const [newEntry, setNewEntry]=useState(false);
-  const [test, setTest]=useState("");
-  const [newGet, setNewGet] = useState(false);
-
-  //=> todoitem(post));
-  let listItems=posts.map( (post) => todoitem(post));
-  let helper = false;
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(API_ENDPOINT, {
-        'method':'GET',
-        'headers': {'x-apikey': API_KEY}
-      })
-      const data = await response.json()
-      // update state -- configured earlier.
-      setPosts(data);
-      setLoading(false);
-    }
-    fetchData();
-  }, [newGet])
-
-  async function postData() {
-    // Default options are marked with *
-    const response = await fetch(API_ENDPOINT, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'x-apikey': API_KEY,
-        "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify({'front':newName,'back':'test','category':'testing'})
-    });
-
-    setNewGet(!newGet);
-    return response; // parses JSON response into native JavaScript objects
-  }
-
-  function addName() {
-    if(newName!=""){
-      postData();
-    }
-  }
-
-
-  if(loading){
-    return(<span>loading...</span>)
-  }else{
   return (
     <>
       <Head>
@@ -87,19 +20,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-      <div className="pure-g">
-          <div className="pure-u-1-3"><p>Thirds</p></div>
-          <div className="pure-u-1-3"><p>Thirds</p></div>
-          <div className="pure-u-1-3"><p>Thirds</p></div>
-      </div>
         <div className={styles.todoitem}>
-          {listItems}
-          <input value={newName} onChange={(e=>setNewName(e.target.value))}></input>
-          <button onClick={addName}>Add an item</button> 
-          <p>{test}</p>
+          <h1 className={styles.header}>Welcome to your todo list</h1>
+          {/* <button>Log In</button> */}
+          {userId ? <UserButton></UserButton> : <SignIn></SignIn>}
         </div>
       </main>
     </>
   )
-  }
 }
