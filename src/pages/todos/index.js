@@ -124,12 +124,13 @@ export default function Home() {
             <div key="info" className="pure-u-4-5">
               <div className={styles.todoitem}>
               <div className="pure-g">
-                  <div key="category" className="pure-u-1-4 categoryDisplayed"><div className={styles.headerLabelCategory}>Category</div></div>
+                  <div key="category" className="pure-u-1-4 categoryDisplayed"><div className={styles.headerLabelCategory}>Category</div>
+                  </div>
                   <div key="content" className="pure-u-3-4"><div className={styles.headerLabels}>Description</div>
                   </div>
                   <div className={styles.todoitem}>
-                  </div>
                   {posts.map( (post) => <ToDoItem key={post.date} post={post} setNewChecked={setNewChecked}/>)}
+                  </div>
                 </div>
               </div>
             </div>
