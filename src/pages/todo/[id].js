@@ -5,7 +5,7 @@ import Image from 'next/image'
 import styles from '@/styles/Home.module.css'
 import CategorySelector from '@/components/CategorySelector.js'
 import {fetchItemData, updateCheckBox, fetchCategories} from '@/modules/Data.js'
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, SignIn, UserButton } from "@clerk/nextjs";
 
 export default function TodoID() {
     const [itemId, setItemId]=useState("");
@@ -17,21 +17,27 @@ export default function TodoID() {
     const [categories, setCategories]=useState([]);
     const [selectedCategory, setSelectedCategory]=useState("");
     const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const [checked, setChecked]=useState(false);
     const router = useRouter();
+
+    function RedirectToHome(){
+      router.push('/');
+    }
 
     function handleChange(checkbox){
         const value = checkbox.target.checked;
+        setChecked(value);
         // need to update database: need ID of todo item and value of the checked item
         // also need to update the list of items
-        async function updateItem(){
-          if(userId){
-            const token = await getToken({template: "codehooks"});
-            let newPost = { ...data}
-            newPost.checked = value;
-            newPost = await updateCheckBox(newPost, token);
-          }
-        }
-        updateItem();
+        // async function updateItem(){
+        //   if(userId){
+        //     const token = await getToken({template: "codehooks"});
+        //     let newPost = { ...data}
+        //     newPost.checked = value;
+        //     newPost = await updateCheckBox(newPost, token);
+        //   }
+        // }
+        // updateItem();
       }
 
     useEffect(() => {
@@ -53,6 +59,7 @@ export default function TodoID() {
             setText(data.description)
             setLoading(false);
             setSelectedCategory(data.category);
+            setChecked(data.checked);
         }
     },[data]);
 
@@ -67,9 +74,38 @@ export default function TodoID() {
       loadCategories()
     }, [loading]);
 // TODO: Make a submit button and make sure everything works correctly on the TODOS page too
+function changeItem(){
+  // need to update database: need ID of todo item and value of the checked item
+  //       also need to update the list of items
+  async function updateItem(){
+    if(userId){
+      const token = await getToken({template: "codehooks"});
+      let newPost = { ...data}
+      newPost.checked = checked;
+      newPost.description = text;
+      newPost.category = selectedCategory;
+      newPost = await updateCheckBox(newPost, token);
+    }
+  }
+  updateItem();
+
+}
+
+
     if(loading){
+      if(!userId){
+        return <>
+            <RedirectToHome/>
+        </>
+    }
         return(<span>loading...</span>)
-    }else{return(
+    }else{
+      if(!userId){
+        return <>
+            <RedirectToHome/>
+        </>
+      }
+      return(
 <>
       <Head>
         <title>Create Next App</title>
@@ -77,7 +113,16 @@ export default function TodoID() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className={styles.header}>ITEM {itemId}</h1>
+      <div className="pure-g" id="menu">
+            <div className="pure-u-3-4">
+                <h1 className={styles.header}>EDIT ITEM</h1>
+            </div>
+            <div className="pure-u-1-4">
+                <div className={styles.userButton}>
+                    <UserButton></UserButton>
+                </div>
+            </div>
+        </div>
       <main className={styles.main}>
       <div className={styles.individualtodoitem}>
       <div key={data.date} className="pure-g">
@@ -85,7 +130,7 @@ export default function TodoID() {
             Category
           </div>
           <div key="checkedDesc" className="pure-u-1-5">
-            Completed?
+            Completed
           </div>
           <div key="contentDesc" className="pure-u-3-5">
             Description
@@ -105,10 +150,11 @@ export default function TodoID() {
           </div>
           <div key="content" className="pure-u-3-5">
             <div>
-                <input type="text" id="editDescription" className={styles.editDescription} value={text} onChange={(e=>setText(e.target.value))}>
-                </input> 
+                <textarea  type="text" id="editDescription" className={styles.editDescriptionSpecific} value={text} onChange={(e=>setText(e.target.value))}>
+                </textarea > 
             </div>
           </div>
+          <button className="pure-button" onClick={changeItem}>Submit Edits</button>
         </div>
         </div>
       </main>

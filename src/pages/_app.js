@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }) {
         <div className="pure-u-1-4"><Link href="/done">Done
             </Link>
           </div>
-        <div className="pure-u-1-4"><p>Categories</p>
+        <div id="changeToLogInIcon" className="pure-u-1-4">
         </div>
     </div>
     </div>

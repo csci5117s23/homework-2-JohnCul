@@ -5,8 +5,9 @@ import styles from '@/styles/Home.module.css'
 import {useEffect, useState} from 'react'
 import CategorySelector from '@/components/CategorySelector.js'
 import ToDoItem from '@/components/ToDoItem.js'
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, SignIn, UserButton } from "@clerk/nextjs";
 import {fetchDataChecked, postDataChecked} from '@/modules/Data.js'
+import {useRouter} from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 export default function Done() {    
@@ -25,6 +26,12 @@ export default function Done() {
     const [newChecked, setNewChecked] = useState(false);
 
     let listItems=posts.map( (post) => <ToDoItem key={post.date} post={post} setNewChecked={setNewChecked}/>);
+
+    let router = useRouter()
+
+    function RedirectToHome(){
+        router.push('/');
+    }
 
     // get data from the database
     useEffect(() => {
@@ -48,14 +55,14 @@ export default function Done() {
 
     //set category list whenever a new post comes in
     useEffect(() => {
-    let newCats = [""];
-    newCats=newCats.concat("New Category");
-    posts.map(post => {
-        if(!newCats.includes(post.category)){
-        newCats = newCats.concat(post.category);
-        }
-    });
-    setCategories(newCats);
+        let newCats = [""];
+        newCats=newCats.concat("New Category");
+        posts.map(post => {
+            if(!newCats.includes(post.category)){
+            newCats = newCats.concat(post.category);
+            }
+        });
+        setCategories(newCats);
     }, [posts]);
 
     // if valid name, add to database
@@ -72,8 +79,18 @@ export default function Done() {
 
 
     if(loading){
-    return(<span>loading...</span>)
+        if(!userId){
+            return <>
+                <RedirectToHome/>
+            </>
+          }
+        return(<span>loading...</span>)
     }else{
+    if(!userId){
+        return <>
+            <RedirectToHome/>
+        </>
+    }
     return (
     <>
         <Head>
@@ -82,7 +99,16 @@ export default function Done() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         </Head>
-        <h1 className={styles.header}>COMPLETED ITEMS</h1>
+        <div className="pure-g" id="menu">
+            <div className="pure-u-3-4">
+                <h1 className={styles.header}>COMPLETED ITEMS</h1>
+            </div>
+            <div className="pure-u-1-4">
+                <div className={styles.userButton}>
+                    <UserButton></UserButton>
+                </div>
+            </div>
+        </div>
         <main className={styles.main}>
         <div className={styles.todoitem}>
             <div key="category" className="pure-u-1-5 categoryDisplayed"><div className={styles.headerLabelCategory}>Category</div></div>

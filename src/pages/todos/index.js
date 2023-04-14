@@ -2,11 +2,12 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import {useEffect, useState} from 'react'
+import {useEffect, useState, createElement} from 'react'
 import CategorySelector from '@/components/CategorySelector.js'
 import ToDoItem from '@/components/ToDoItem.js'
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, SignIn, UserButton } from "@clerk/nextjs";
 import {fetchDataUnchecked, postDataUnchecked, fetchCategories} from '@/modules/Data.js'
+import {useRouter} from 'next/router'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,11 +20,17 @@ export default function Home() {
   const [newName, setNewName]=useState("");
   const [newCategoryHidden, setNewCategoryHidden] = useState(true);
   const [newCategory, setNewCategory] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [newGet, setNewGet] = useState(false);
   const [categories, setCategories] = useState([]);
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [newChecked, setNewChecked] = useState(false);
+
+  let router = useRouter();
+
+  function RedirectToHome(){
+    router.push('/');
+  }
 
   let listItems=posts.map( (post) => <ToDoItem key={post.date} post={post} newChecked={newChecked} setNewChecked={setNewChecked}/>);
 
@@ -70,10 +77,19 @@ export default function Home() {
     }
   }
 
-
   if(loading){
+    if(!userId){
+      return <>
+          <RedirectToHome/>
+      </>
+  }
     return(<span>loading...</span>)
   }else{
+    if(!userId){
+      return <>
+          <RedirectToHome/>
+      </>
+    }
   return (
     <>
       <Head>
@@ -82,7 +98,16 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className={styles.header}>TODOS</h1>
+      <div className="pure-g" id="menu">
+            <div className="pure-u-3-4">
+                <h1 className={styles.header}>TODOS</h1>
+            </div>
+            <div className="pure-u-1-4">
+                <div className={styles.userButton}>
+                    <UserButton></UserButton>
+                </div>
+            </div>
+        </div>
       <main className={styles.main}>
         <div className={styles.todoitem}>
           <p>New To Do Item: 

@@ -23,7 +23,7 @@ export default function CategorySelector(props) {
 
     if(!loading){
         function checkSelectedCategory(event){
-            props.setSelectedCategory(event.target.value);
+            props.setSelectedCategory(categories[event.target.value]);
             setSelectedIndex(event.target.value);
             let newCatBox = document.getElementById("newCategoryInput");
             if(event.target.value == 1){
@@ -49,7 +49,7 @@ export default function CategorySelector(props) {
         })
 
         return (
-            <select className={styles.todoCategorySelector} name="categoriesSelector" id="categoriesSelector" onChange={checkSelectedCategory} value={selectedIndex} defaultValue={selectedIndex}>
+            <select className={styles.todoCategorySelector} name="categoriesSelector" id="categoriesSelector" onChange={checkSelectedCategory} value={selectedIndex}>
                 {mappedCats}
             </select>
         )
