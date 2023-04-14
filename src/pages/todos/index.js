@@ -5,16 +5,15 @@ import styles from '@/styles/Home.module.css'
 import {useEffect, useState, createElement} from 'react'
 import CategorySelector from '@/components/CategorySelector.js'
 import ToDoItem from '@/components/ToDoItem.js'
+import CategorySidebar from '@/components/CategorySidebar.js'
 import { useAuth, SignIn, UserButton } from "@clerk/nextjs";
 import {fetchDataUnchecked, postDataUnchecked, fetchCategories} from '@/modules/Data.js'
 import {useRouter} from 'next/router'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const API_ENDPOINT = 'https://backend-9f6j.api.codehooks.io/dev/toDoItem'
-  const API_KEY = '271f7152-88ba-4d48-bc2d-f433a2c6d37d'
-
   const [posts, setPosts] = useState([]);
   const [loading, setLoading]=useState(true);
   const [newName, setNewName]=useState("");
@@ -25,6 +24,7 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [newChecked, setNewChecked] = useState(false);
+  const [newCatDeleted, setNewCatDeleted] = useState(false);
 
   let router = useRouter();
 
@@ -44,7 +44,9 @@ export default function Home() {
     }
     loadToDoData();
     setNewChecked(false);
-  }, [newGet, isLoaded, newChecked]);
+    setNewCatDeleted(false);  
+    console.log("HERE")
+  }, [newGet, isLoaded, newChecked, newCatDeleted]);
 
   // post data to the database
   async function postData(selectedCategory) {
@@ -123,10 +125,22 @@ export default function Home() {
             
             </p>
           </div>
-          <div className={styles.todoitem}>
-            <div key="category" className="pure-u-1-5 categoryDisplayed"><div className={styles.headerLabelCategory}>Category</div></div>
-            <div key="content" className="pure-u-1-5"><div className={styles.headerLabels}>Description</div></div>
-            {posts.map( (post) => <ToDoItem key={post.date} post={post} setNewChecked={setNewChecked}/>)}
+          <div className="pure-g">
+            <div key="categorySidebar" className="pure-u-1-5">
+              <CategorySidebar reloader={newCatDeleted} setReloader={setNewCatDeleted} isChecked={false} initPath="/todos/"/>
+            </div>
+            <div key="info" className="pure-u-4-5">
+              <div className={styles.todoitem}>
+              <div className="pure-g">
+                  <div key="category" className="pure-u-1-4 categoryDisplayed"><div className={styles.headerLabelCategory}>Category</div></div>
+                  <div key="content" className="pure-u-3-4"><div className={styles.headerLabels}>Description</div>
+                  </div>
+                  <div className={styles.todoitem}>
+                  </div>
+                  {posts.map( (post) => <ToDoItem key={post.date} post={post} setNewChecked={setNewChecked}/>)}
+                </div>
+              </div>
+            </div>
         </div>
       </main>
     </>

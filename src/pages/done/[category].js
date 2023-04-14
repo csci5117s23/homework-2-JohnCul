@@ -14,6 +14,9 @@ import CategorySidebar from '@/components/CategorySidebar.js'
 const inter = Inter({ subsets: ['latin'] })
 
 export default function TodosCategory() {
+  const API_ENDPOINT = 'https://backend-9f6j.api.codehooks.io/dev/toDoItem'
+  const API_KEY = '271f7152-88ba-4d48-bc2d-f433a2c6d37d'
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading]=useState(true);
   const [newName, setNewName]=useState("");
@@ -21,7 +24,7 @@ export default function TodosCategory() {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   const [newChecked, setNewChecked] = useState(false);
   const [category, setCategory] = useState("");
-  const [newCatDeleted, setNewCatDeleted] = useState(false);
+
   let router = useRouter();
 
   function RedirectToHome(){
@@ -39,7 +42,7 @@ export default function TodosCategory() {
     async function loadToDoDataCategory(){
       if(userId && category != ""){
         const token = await getToken({template: "codehooks"});
-        fetchDataForCategory(setPosts, category, userId, token, false);
+        fetchDataForCategory(setPosts, category, userId, token, true);
       }
     }
     loadToDoDataCategory();
@@ -47,20 +50,6 @@ export default function TodosCategory() {
     setLoading(false);
   }, [newGet, isLoaded, newChecked, category]);
 
-  // post data to the database
-  async function postData() {
-    if(userId){
-      const token = await getToken({template: "codehooks"});
-      postDataUnchecked(token, newGet, setNewGet, userId, newName, category);
-    }
-  }
-
-  // if valid name, add to database
-  function addName() {
-    if(newName!=""){
-      postData(category);
-    }
-  }
 
   if(loading){
     if(!userId){
@@ -85,7 +74,7 @@ export default function TodosCategory() {
       </Head>
       <div className="pure-g" id="menu">
             <div className="pure-u-3-4">
-                <h1 className={styles.header}>TODOS: {category}</h1>
+                <h1 className={styles.header}>DONE : {category}</h1>
             </div>
             <div className="pure-u-1-4">
                 <div className={styles.userButton}>
@@ -94,31 +83,18 @@ export default function TodosCategory() {
             </div>
         </div>
       <main className={styles.main}>
-        <div className={styles.todoitem}>
-          <p>New To Do Item: 
-            <input className={styles.newtodoitem} value={newName} onChange={(e=>setNewName(e.target.value))}>
-            </input> 
-            <span className={styles.categoryLabel}>Category: {category}</span>
-            <span className={styles.newtodosubmit}>
-              <button className="pure-button" onClick={addName}>Add Item</button> 
-            </span>
-            
-            </p>
-          </div>
           <div className="pure-g">
             <div key="categorySidebar" className="pure-u-1-5">
-              <CategorySidebar reloader={newCatDeleted} setReloader={setNewCatDeleted} isChecked={true} initPath="/todos/"/>
+              <CategorySidebar reloader={newGet} setReloader={setNewGet} isChecked={true} initPath="/done/"/>
             </div>
-            <div key="iteminfo" className="pure-u-4-5">
+            <div key="todoList" className="pure-u-4-5">
               <div className={styles.todoitem}>
               <div className="pure-g">
                   <div key="category" className="pure-u-1-4 categoryDisplayed"><div className={styles.headerLabelCategory}>Category</div></div>
-                  <div key="content" className="pure-u-3-4"><div className={styles.headerLabels}>Description</div>
-                  </div>
+                  <div key="content" className="pure-u-3-4"><div className={styles.headerLabels}>Description</div></div>
                   </div>
                   <div className={styles.todoitem}>
                   {posts.map( (post) => <ToDoItem key={post.date} post={post} setNewChecked={setNewChecked}/>)}
-                  
                 </div>
               </div>
             </div>

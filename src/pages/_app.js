@@ -9,20 +9,17 @@ export default function App({ Component, pageProps }) {
   <ClerkProvider {...pageProps} >
     <div className={styles.topmenu}>
     <div className="topmenu pure-g" id="menu">
-        <div className="pure-u-1-4">
+        <div className="pure-u-1-3">
           <h2>Todo List</h2>
         </div>
 
-        <div className="pure-u-1-4">
+        <div className="pure-u-1-3">
             <Link href="/todos">Todos
             </Link>
         </div>
-        <div className="pure-u-1-4"><Link href="/done">Done
+        <div className="pure-u-1-3"><Link href="/done">Done
             </Link>
           </div>
-        <div className="pure-u-1-4"><Link href="/categories">Category
-            </Link>
-        </div>
     </div>
     </div>
 

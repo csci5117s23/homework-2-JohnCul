@@ -104,7 +104,7 @@ export async function fetchDataCategory(setItemCatDelList, category, userId, aut
 }
 
 // fetch unchecked data of a specific category
-export async function fetchDataUncheckedCategory(setPosts, category,  userId, authToken, checked) {
+export async function fetchDataForCategory(setPosts, category,  userId, authToken, checked) {
   const response = await fetch(backend_base+`/toDoItem?userId=${userId}&category=${category}&checked=${checked}`, {
     'method':'GET',
     'headers': {'Authorization': 'Bearer ' + authToken}
