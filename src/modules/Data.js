@@ -8,7 +8,6 @@ export async function fetchItemData(itemId,userId, setData, authToken) {
       'headers': {'Authorization': 'Bearer ' + authToken, 'Accept': 'application/json'}
     })
     const data = await response.json()
-    // update state -- configured earlier.
     setData(data[0]);
   }
 }
@@ -20,7 +19,6 @@ export async function fetchDataUnchecked(setData, setLoading, userId, authToken)
       'headers': {'Authorization': 'Bearer ' + authToken, 'Accept': 'application/json'}
     })
     const data = await response.json()
-    // update state -- configured earlier.
     setData(data);
     setLoading(false);
   }
@@ -32,7 +30,6 @@ export async function fetchDataChecked(setData, setLoading, userId, authToken) {
     'headers': {'Authorization': 'Bearer ' + authToken}
   })
   const data = await response.json()
-  // update state -- configured earlier.
   setData(data);
   setLoading(false);
 }
@@ -44,7 +41,6 @@ export async function fetchCategories(setCategories, userId, authToken) {
     'headers': {'Authorization': 'Bearer ' + authToken}
   })
   const data = await response.json()
-  // update state -- configured earlier.
   let newCats = [""];
     newCats=newCats.concat("New Category");
     data.map(data => {
@@ -57,7 +53,6 @@ export async function fetchCategories(setCategories, userId, authToken) {
 
 // send a post to the backend
 export async function postDataUnchecked(authToken,newGet, setNewGet,userId,newName,selectedCategory) {
-  // Default options are marked with *
   const response = await fetch(backend_base+'/toDoItem', {
     'method':'POST',
         'headers': {'Authorization': 'Bearer ' + authToken,
@@ -65,12 +60,11 @@ export async function postDataUnchecked(authToken,newGet, setNewGet,userId,newNa
         'body': JSON.stringify({'userId':userId,'description':newName,'checked':false,'category':selectedCategory})
   }); 
   setNewGet(!newGet);
-  return response; // parses JSON response into native JavaScript objects
+  return response;
 }
 
 // send a post to the backend with checked
 export async function postDataChecked(authToken,newGet, setNewGet,userId,newName,selectedCategory) {
-  // Default options are marked with *
   const response = await fetch(backend_base+'/toDoItem', {
     'method':'POST',
         'headers': {'Authorization': 'Bearer ' + authToken,
@@ -78,7 +72,7 @@ export async function postDataChecked(authToken,newGet, setNewGet,userId,newName
         'body': JSON.stringify({'userId':userId,'description':newName,'checked':true,'category':selectedCategory})
   }); 
   setNewGet(!newGet);
-  return response; // parses JSON response into native JavaScript objects
+  return response;
 }
 
 // update todoitem to have the opposite "checked" boolean and remove cateogry
@@ -99,7 +93,6 @@ export async function fetchDataCategory(setItemCatDelList, category, userId, aut
     'headers': {'Authorization': 'Bearer ' + authToken}
   })
   const data = await response.json()
-  // update state -- configured earlier.
   setItemCatDelList(data);
 }
 
@@ -110,6 +103,5 @@ export async function fetchDataForCategory(setPosts, category,  userId, authToke
     'headers': {'Authorization': 'Bearer ' + authToken}
   })
   const data = await response.json()
-  // update state -- configured earlier.
   setPosts(data);
 }

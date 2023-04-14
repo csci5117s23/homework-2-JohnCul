@@ -80,7 +80,7 @@ export default function CategorySidebar(props) {
     if(!loading){
         return(
             <>
-            <div className={styles.todoitem}>Filter:
+            <div className={styles.todoitem}>Filter Category:
             {categories.map(cat => {
                 if(cat!="" && cat!="New Category"){
                     const redirLink = initPath+""+cat

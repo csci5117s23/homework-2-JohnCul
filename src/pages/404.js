@@ -9,9 +9,10 @@ export default function Home() {
     }
 
 
-    return(<div className={styles.errorWrapper}>
-    <div> ERROR</div>
-    <button className="pure-button" onClick={changeItem}>Return to Todos</button>
+    return(
+    <div className={styles.errorWrapper}>
+        <div>ERROR</div>
+        <button className="pure-button" onClick={changeItem}>Return to Todos</button>
     </div>
     )
 }

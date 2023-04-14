@@ -11,12 +11,10 @@ Please fill out all of the following sections to help us grade your submission:
 
 ## Link to Site
 
-## used https://medium.com/tinyso/how-to-create-a-dropdown-select-component-in-react-bf85df53e206 to build a dropdown
-
-<https://TODO.com/>
+https://subtle-biscochitos-6769eb.netlify.app/
 
 ## Challenge Task
 
-* I started the challenge task: [yes/no]
-* I completed the challenge task: [yes/no]
+* I started the challenge task: [yes]
+* I completed the challenge task: [yes]
 
