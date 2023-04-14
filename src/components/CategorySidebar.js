@@ -76,17 +76,13 @@ export default function CategorySidebar(props) {
 
     if(loading){
         if(!userId){
-            return <>
-                <RedirectToHome/>
-            </>
+            RedirectToHome();
         }
         return(<span>loading...</span>)
     }
     if(!loading){
         if(!userId){
-            return <>
-                <RedirectToHome/>
-            </>
+            RedirectToHome();
         }
         return(
             <>

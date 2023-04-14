@@ -53,16 +53,12 @@ export default function TodosCategory() {
 
   if(loading){
     if(!userId){
-      return <>
-          <RedirectToHome/>
-      </>
+      RedirectToHome();
   }
     return(<span>loading...</span>)
   }else{
     if(!userId){
-      return <>
-          <RedirectToHome/>
-      </>
+      RedirectToHome();
     }
   return (
     <>
@@ -74,7 +70,7 @@ export default function TodosCategory() {
       </Head>
       <div className="pure-g" id="menu">
             <div className="pure-u-3-4">
-                <h1 className={styles.header}>DONE : {category}</h1>
+                <h1 className={styles.header}>DONE: {category}</h1>
             </div>
             <div className="pure-u-1-4">
                 <div className={styles.userButton}>

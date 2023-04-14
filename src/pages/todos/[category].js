@@ -64,16 +64,12 @@ export default function TodosCategory() {
 
   if(loading){
     if(!userId){
-      return <>
-          <RedirectToHome/>
-      </>
+      RedirectToHome();
   }
     return(<span>loading...</span>)
   }else{
     if(!userId){
-      return <>
-          <RedirectToHome/>
-      </>
+      RedirectToHome();
     }
   return (
     <>
