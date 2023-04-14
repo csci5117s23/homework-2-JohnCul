@@ -17,6 +17,7 @@
   margin-top: 0.5rem;
   align-items: center;
 }
+
 .userButton{
   float:right;
   padding:10px;
@@ -73,6 +74,10 @@
   margin-right: 10px;
   width: 100%;
   max-width: 100%;
+}
+
+.deleteButton {
+  float:right;
 }
 
 .editWrapper{

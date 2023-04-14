@@ -81,7 +81,7 @@ export async function postDataChecked(authToken,newGet, setNewGet,userId,newName
   return response; // parses JSON response into native JavaScript objects
 }
 
-// update todoitem to have the opposite "checked" boolean
+// update todoitem to have the opposite "checked" boolean and remove cateogry
 export async function updateCheckBox(newPost, authToken){
   const response = await fetch(backend_base+'/updateTodoItem?_id='+newPost._id, {
     'method':'PUT',
@@ -90,4 +90,26 @@ export async function updateCheckBox(newPost, authToken){
         'body': JSON.stringify(newPost)
   }); 
   return await response.json();
+}
+
+// fetch data with a specific category
+export async function fetchDataCategory(setItemCatDelList, category, userId, authToken) {
+  const response = await fetch(backend_base+`/toDoItem?userId=${userId}&category=${category}`, {
+    'method':'GET',
+    'headers': {'Authorization': 'Bearer ' + authToken}
+  })
+  const data = await response.json()
+  // update state -- configured earlier.
+  setItemCatDelList(data);
+}
+
+// fetch unchecked data of a specific category
+export async function fetchDataUncheckedCategory(setPosts, category,  userId, authToken, checked) {
+  const response = await fetch(backend_base+`/toDoItem?userId=${userId}&category=${category}&checked=${checked}`, {
+    'method':'GET',
+    'headers': {'Authorization': 'Bearer ' + authToken}
+  })
+  const data = await response.json()
+  // update state -- configured earlier.
+  setPosts(data);
 }

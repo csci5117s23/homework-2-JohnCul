@@ -27,17 +27,6 @@ export default function TodoID() {
     function handleChange(checkbox){
         const value = checkbox.target.checked;
         setChecked(value);
-        // need to update database: need ID of todo item and value of the checked item
-        // also need to update the list of items
-        // async function updateItem(){
-        //   if(userId){
-        //     const token = await getToken({template: "codehooks"});
-        //     let newPost = { ...data}
-        //     newPost.checked = value;
-        //     newPost = await updateCheckBox(newPost, token);
-        //   }
-        // }
-        // updateItem();
       }
 
     useEffect(() => {
@@ -83,7 +72,12 @@ function changeItem(){
       let newPost = { ...data}
       newPost.checked = checked;
       newPost.description = text;
-      newPost.category = selectedCategory;
+      if(selectedCategory=="New Category"){
+        newPost.category = newCategory;
+      }else{
+        newPost.category = selectedCategory;
+      }
+      
       newPost = await updateCheckBox(newPost, token);
     }
   }
