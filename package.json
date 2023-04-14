@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^4.15.0",
     "codehooks-crudlify": "^1.0.8",
     "codehooks-js": "^1.0.10",
+    "cors": "^2.8.5",
     "next": "13.2.4",
     "purecss": "^3.0.0",
     "react": "18.2.0",

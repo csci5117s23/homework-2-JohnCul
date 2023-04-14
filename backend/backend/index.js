@@ -15,12 +15,6 @@ const toDoYup = object({
     date: date().default(() => new Date()),
 })
 
-// async function updateChecked(req, res) {
-//     const datastore = await Datastore.open();
-//     const result = await datastore.updateOne('todos', req.query._id, req.description);
-//     res.json(result);
-// }
-// app.put("/updateChecked", updateChecked);
 app.put('/updateTodoItem', updateCheckBox)
 async function updateCheckBox(req, res) {
     const database = await Datastore.open();

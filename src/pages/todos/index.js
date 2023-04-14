@@ -45,7 +45,6 @@ export default function Home() {
     loadToDoData();
     setNewChecked(false);
     setNewCatDeleted(false);  
-    console.log("HERE")
   }, [newGet, isLoaded, newChecked, newCatDeleted]);
 
   // post data to the database
@@ -53,6 +52,7 @@ export default function Home() {
     if(userId){
       const token = await getToken({template: "codehooks"});
       postDataUnchecked(token, newGet, setNewGet, userId, newName, selectedCategory);
+      setNewCatDeleted(true);
     }
   }
 

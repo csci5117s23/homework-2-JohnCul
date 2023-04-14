@@ -52,6 +52,7 @@ export default function TodosCategory() {
     if(userId){
       const token = await getToken({template: "codehooks"});
       postDataUnchecked(token, newGet, setNewGet, userId, newName, category);
+      setNewCatDeleted(true);
     }
   }
 
