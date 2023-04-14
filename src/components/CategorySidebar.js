@@ -75,15 +75,9 @@ export default function CategorySidebar(props) {
     }, [deletedCategory, reloader]);
 
     if(loading){
-        if(!userId){
-            RedirectToHome();
-        }
         return(<span>loading...</span>)
     }
     if(!loading){
-        if(!userId){
-            RedirectToHome();
-        }
         return(
             <>
             <div className={styles.todoitem}>Filter:

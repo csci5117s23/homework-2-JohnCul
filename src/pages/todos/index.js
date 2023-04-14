@@ -26,11 +26,13 @@ export default function Home() {
   const [newChecked, setNewChecked] = useState(false);
   const [newCatDeleted, setNewCatDeleted] = useState(false);
 
-  let router = useRouter();
+  const router = useRouter();
 
-  function RedirectToHome(){
-    router.push('/');
-  }
+  useEffect(() => {
+    if(isLoaded && !userId) {
+      router.push("/");
+    }
+}, [isLoaded, userId])
 
   let listItems=posts.map( (post) => <ToDoItem key={post.date} post={post} newChecked={newChecked} setNewChecked={setNewChecked}/>);
 
@@ -80,14 +82,8 @@ export default function Home() {
   }
 
   if(loading){
-    if(!userId){
-      RedirectToHome();
-  }
     return(<span>loading...</span>)
   }else{
-    if(!userId){
-      RedirectToHome();
-    }
   return (
     <>
       <Head>

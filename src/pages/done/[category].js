@@ -25,11 +25,13 @@ export default function TodosCategory() {
   const [newChecked, setNewChecked] = useState(false);
   const [category, setCategory] = useState("");
 
-  let router = useRouter();
+  const router = useRouter();
 
-  function RedirectToHome(){
-    router.push('/');
-  }
+  useEffect(() => {
+    if(isLoaded && !userId) {
+      router.push("/");
+      }
+  }, [isLoaded, userId])
  
     useEffect(() => {
         setCategory(router.query.category);
@@ -52,14 +54,8 @@ export default function TodosCategory() {
 
 
   if(loading){
-    if(!userId){
-      RedirectToHome();
-  }
     return(<span>loading...</span>)
   }else{
-    if(!userId){
-      RedirectToHome();
-    }
   return (
     <>
       <Head>
